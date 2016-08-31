@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Xamarin-macios by YOTOV-LIMITED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Xamarin-macios</h1>
+      <h2 class="project-tagline">Bridges the worlds of .NET with the native APIs of Mac, iOS, tvOS, and watchOS.</h2>
+      <a href="https://github.com/YOTOV-LIMITED/xamarin-macios" class="btn">View on GitHub</a>
+      <a href="https://github.com/YOTOV-LIMITED/xamarin-macios/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/YOTOV-LIMITED/xamarin-macios/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="xamarinios--xamarinmac" class="anchor" href="#xamarinios--xamarinmac" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Xamarin.iOS &amp; Xamarin.Mac</h1>
+
+<p>This module is the main repository for both <strong>Xamarin.iOS</strong> and <strong>Xamarin.Mac</strong>.</p>
+
+<p>These frameworks allow us to create native iOS, tvOS, watchOS and Mac applications using the same UI controls we would in Objective-C and Xcode, except with the flexibility and elegance of a modern language (C#), the power of the .NET Base Class Library (BCL), and two first-class IDEs—Xamarin Studio and Visual Studio—at our fingertips.</p>
+
+<h3>
+<a id="continuous-builds" class="anchor" href="#continuous-builds" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Continuous Builds</h3>
+
+<p>You can download continuous builds of our main development branches from <a href="https://github.com/xamarin/xamarin-macios/wiki#continuous-builds">our wiki page</a>.</p>
+
+<h2>
+<a id="build-requirements" class="anchor" href="#build-requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Build requirements</h2>
+
+<ul>
+<li>
+<p>Autoconf, automake and libtool.</p>
+
+<p>You can use brew, or <a href="https://gist.github.com/rolfbjarne/3a979187ddd0855da073">this script</a> to get
+it directly from gnu.org (you'll have to edit your PATH to include /opt/bin if you use the script)</p>
+
+<p>To install brew and all the tool dependencies:</p>
+
+<pre><code>$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+$ brew update
+$ brew install libtool autoconf automake bison flex
+</code></pre>
+</li>
+<li>
+<p>Xcode</p>
+
+<p>To build the Xamarin.iOS and Xamarin.Mac SDKs you need a certain version of Xcode.
+The build will tell you exactly which version you need.</p>
+
+<p>You can download the Xcode version you need from <a href="https://developer.apple.com/downloads/index.action?name=Xcode">Apple's Developer Center</a>
+(requires an Apple Developer account).</p>
+
+<p>To ease development with different versions of the SDK that require different versions
+of Xcode, we require Xcode to be in a non-standard location (based on the Xcode version).</p>
+
+<p>For example Xcode 7.0 must be installed in /Applications/Xcode7.app.</p>
+
+<p>The recommended procedure is to download the corresponding Xcode dmg from Apple's
+Developer Center, extract Xcode.app to your system, <em>and rename it before
+launching it the first time</em>. Renaming Xcode.app after having launched it
+once may confuse Xcode, and strange errors start occuring.</p>
+</li>
+<li>
+<p>Mono MDK.</p>
+
+<p>The build will tell you if you need to update, and where to get it.</p>
+</li>
+<li>
+<p>Xamarin Studio.</p>
+
+<p>The build will tell you if you need to update, and where to get it.</p>
+</li>
+<li>
+<p>You can also provision some of the dependencies with an included script:</p>
+
+<pre><code>$ ./system-dependencies.sh --provision-[xcode|xamarin-studio|mono|all]
+</code></pre>
+</li>
+</ul>
+
+<h2>
+<a id="quick-build--install" class="anchor" href="#quick-build--install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a> Quick build &amp; install</h2>
+
+<p>Follow the following steps to build and install Xamarin.iOS and Xamarin.Mac:</p>
+
+<ol>
+<li>
+<p>Clone this repository and its submodules</p>
+
+<pre><code>$ git clone --recursive git@github.com:xamarin/xamarin-macios.git
+$ cd xamarin-macios
+</code></pre>
+</li>
+<li>
+<p>Fetch dependencies and build everything</p>
+
+<pre><code>$ make world
+</code></pre>
+</li>
+<li>
+<p>Make sure permissions are OK to install into system directories (this will ask for your password)</p>
+
+<pre><code>$ make fix-install-permissions
+</code></pre>
+</li>
+<li>
+<p>Install into the system</p>
+
+<pre><code>$ make install-system
+</code></pre>
+</li>
+</ol>
+
+<h2>
+<a id="configure" class="anchor" href="#configure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configure</h2>
+
+<p>There is a configure script that can optionally be used to configure the build.
+By default, everything required for both Xamarin.iOS and Xamarin.Mac will be built.</p>
+
+<ul>
+<li>--disable-mac: Disable Mac-related parts.</li>
+<li>
+<p>--disable-ios: Disable iOS-related parts.</p>
+
+<p>In both cases the resulting build will contain both iOS and Mac bits because:</p>
+
+<ul>
+<li><p>Parts of the iOS build depends on Mac parts (in particular mtouch uses
+Xamarin.Mac).</p></li>
+<li><p>The class libraries builds can not be disabled because a very common error
+is to end up with code that only works/builds in either iOS or Mac.</p></li>
+</ul>
+</li>
+<li><p>--enable-ccache: Enables cached builds with <code>ccache</code> (default if <code>ccache</code> is found in the path).</p></li>
+<li>--disable-ccache: Disables cached builds with <code>ccache</code>, even if it is present.</li>
+<li>--disable-strip: If executables should be stripped or not. This makes it easier
+to debug native executables using lldb.</li>
+<li>--help: Show the help.</li>
+</ul>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+
+<h3>
+<a id="mailing-lists" class="anchor" href="#mailing-lists" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mailing Lists</h3>
+
+<p>To discuss this project, and participate in the design, we use the <a href="http://lists.xamarin.com/mailman/listinfo/macios-devel">macios-devel@lists.xamarin.com</a> mailing list.   </p>
+
+<h3>
+<a id="chat" class="anchor" href="#chat" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Chat</h3>
+
+<p>There is also a gitter chat room that can be used to discuss this project, and participate in the design: 
+<a href="https://gitter.im/xamarin/xamarin-macios?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
+
+<h3>
+<a id="coding-guidelines" class="anchor" href="#coding-guidelines" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Coding Guidelines</h3>
+
+<p>We use <a href="http://www.mono-project.com/community/contributing/coding-guidelines/">Mono's Coding Guidelines</a>.</p>
+
+<h3>
+<a id="reporting-bugs" class="anchor" href="#reporting-bugs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reporting Bugs</h3>
+
+<p>We use <a href="https://bugzilla.xamarin.com/newbug">Bugzilla</a> to track issues.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/YOTOV-LIMITED/xamarin-macios">Xamarin-macios</a> is maintained by <a href="https://github.com/YOTOV-LIMITED">YOTOV-LIMITED</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
